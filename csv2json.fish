@@ -1,4 +1,4 @@
-#!/mnt/c/ fish
+#!/usr/bin/env fish
 function csv2json
     echo "YO WHAT'S GUYS WE ARE GOING TO A FOREST!!!!"
 end
