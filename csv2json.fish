@@ -4,4 +4,4 @@ function csv2json
 end
 
 
-csv2 $argv
+csv2json $argv
