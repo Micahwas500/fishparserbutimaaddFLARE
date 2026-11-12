@@ -1,10 +1,13 @@
 #!/usr/bin/env fish
 
 function _print_help
-    echo "Usage: csv2json [OPTIONS] [FILE ...]"
-options:
+    echo '
+Usage: csv2json [OPTIONS] [FILE ...]
+I hope this works well! Thanks to hackclub for helping me learn FISH!
+
+Options:
     -h, --help
-        'HEY ITS ME ITS AMAZITY'
+        Print this help'
 end
 # checks flags via argparse, sets flag as fail if no flag, if help is set then print help message!
 # i think i understand it now 🤓
@@ -24,6 +27,11 @@ function csv2json
         _print_help
         return 0
     end
+    # leaves all BUT the files thankfully tank you club de hakor!
+    set files $argv
+
+    return 0
+end
 csv2json $argv
 # reference!
 # if CONDITION; COMMANDS_TRUE ...;
