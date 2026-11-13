@@ -7,8 +7,12 @@ I hope this works well! Thanks to hackclub for helping me learn FISH!
 
 Options:
     -h, --help
-        Print this help'
+        Print this help message for you! '
 end
+#process line runs to remove the , and split it. Let me cook from here please (this can and, probably, WILL suck :p )
+function _process_line -a line col_count
+    set header $argv[3..]
+    set values (string split ',' $line)
 # checks flags via argparse, sets flag as fail if no flag, if help is set then print help message!
 # i think i understand it now 🤓
 function csv2json
@@ -33,7 +37,7 @@ function csv2json
     # reads line whilst echoing!
 
     # loops!
-    # checks line count now (sets lines and r)
+    # checks line count now (sets lines variable and trims per line end!)
     for file in $files
         set lines (string trim (string split '\n' < $file))
         for line in $lines
