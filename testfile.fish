@@ -17,10 +17,10 @@ function _get_file
 	end
 end
 # _process_line gets $line as an argument
-function _process_line -a line
+function _process_line -a url
     # Split the line with seperator ',', and loop over each value in the line
-    for value in (string split ',' $line)
-        echo $value
+    for url in (string split ',' $fullurls)
+        echo $url
     end
 end
 
@@ -36,7 +36,7 @@ function _process_file -a file
     end
 end
 
-function csv2json
+function testfile
     argparse h/help -- $argv
     or set -f failure true # set a failure flag, but otherwise fail silently.
 
