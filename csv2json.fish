@@ -27,14 +27,32 @@ function csv2json
         _print_help
         return 0
     end
-    # leaves all BUT the files thankfully tank you club de hakor!
+    # leaves all BUT the files path thankfully tank you club de hakor!
     set files $argv
+    
+    # reads line whilst echoing!
+
+    # loops!
+    # checks line count now (sets lines and r)
+    for file in $files
+        set lines (string trim (string split '\n' < $file))
+        for line in $lines
+            echo $line
+        end
+    end
 
     return 0
 end
 csv2json $argv
-# reference!
+    # reference!
 # if CONDITION; COMMANDS_TRUE ...;
 # [else if CONDITION2; COMMANDS_TRUE2 ...;]
 # [else; COMMANDS_FALSE ...;]
 # end
+    # ref 2
+# echo "How old are you?"
+
+# Note: `-p ''` suppresses the default prompt that `read` uses.
+# read -p '' age
+
+# echo "Your're $age years old!"
