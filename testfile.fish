@@ -18,17 +18,16 @@ function _get_url
         if test "$repeatlink" = "true"
             _get_url
             end
-        set -g counter 0
-        _fetch_filesyay
     end
-# this gets files and appends them!
+# this gets files/filenames and appends them!
 function _fetch_filesyay
     # Split the line with seperator ',', and loop over each value in the line
     for url in $link
         echo "downloading $url"
         set counter (math $counter + 1)
-        curl -o "downloadedfile_$counter.csv" "$url"
-        
+        set -l filename "downloadedfile_$counter.csv"
+        curl -L -o "$filename" "$url"
+        set -a -g files "$filename"
     end
 end
 # _process_line gets $line as an argument
@@ -53,11 +52,11 @@ function testfile
         _print_help
         return 1
     end
-    
     if set -q _flag_u
         _get_url
-        return 0
-    end
+        set -g counter 0
+        _fetch_filesyay
+        end
     # check if the user requested help
     if set -q _flag_h
         _print_help
@@ -66,8 +65,7 @@ function testfile
 
     # as argparse goes through $argv, it removes all the options but leaves
     # arguments behind, which are our files.
-    set files $argv
-
+    set -a files $argv
     for file in $files # <- do this for every file we get on the command line
         _process_file $file
     end

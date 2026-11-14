@@ -9,11 +9,31 @@ Options:
     -h, --help
         Print this help message for you! 
     -u --url
-        Makes it a url! *Mutually exclusive with Files!*'
+        Makes it a url! *(hopefully) Not mutually exclusive with Files!*'
 end
 # take a wild guess :)
-function _process_urls! -a url
-    set values (curl url )
+function _get_url
+	echo what link do you have? 
+    read -l templink
+        echo "your link is $templink"
+        set -a -g link $templink
+        echo 'do you want another link? (true/false)'
+        read -l repeatlink
+        if test "$repeatlink" = "true"
+            _get_url
+            end
+    end
+# this gets files/filenames and appends them!
+function _fetch_filesyay
+    # Split the line with seperator ',', and loop over each value in the line
+    for url in $link
+        echo "downloading $url"
+        set counter (math $counter + 1)
+        set -l filename "downloadedfile_$counter.csv"
+        curl -L -o "$filename" "$url"
+        set -a -g files "$filename"
+    end
+end
 #process line runs to remove the , and split it. It then prints the jsonness. Let me cook from here please (this can and, probably, WILL suck :p )
 function _process_line -a line col_count
     set header $argv[3..]
@@ -58,7 +78,7 @@ end
 # i think i understand it now 🤓> nvm lol, ts is hard
 
 function csv2json
-    argparse h/help -- $argv
+    argparse h/help u/url -- $argv
     or set -f failure true # set a failure flag, but otherwise fail silently.
 
     # check if we've failed
@@ -66,7 +86,11 @@ function csv2json
         _print_help
         return 1
     end
-
+    # YAYAYAY URL CHECK
+    if set -q _flag_u
+        _get_url
+        _fetch_filesyay
+        end
     # check if the user requested help
     if set -q _flag_h
         _print_help
@@ -75,7 +99,7 @@ function csv2json
 
     # as argparse goes through $argv, it removes all the options but leaves
     # arguments behind, which are our files.
-    set files $argv
+    set -a files $argv
 
     for file in $files # <- do this for every file we get on the command line
         # If we have more than 1 file, we need to print headers
