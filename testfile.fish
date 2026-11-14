@@ -7,23 +7,31 @@ Options:
     -h, --help
         Print this help'
 end
-function _get_file
-	for value in (string split ',' $line)
-		echo " \
-		{}
-		" | \
-		curl \
-		--request POST "$url" \"
-	end
-end
-# _process_line gets $line as an argument
-function _process_line -a url
+# i am so smart
+function _get_url
+	echo what link do you have? 
+    read -l templink
+        echo "your link is $templink"
+        set -a -g link $templink
+        echo 'do you want another link? (true/false)'
+        read -l repeatlink
+        if test "$repeatlink" = "true"
+            _get_url
+            end
+        set -g counter 0
+        _fetch_filesyay
+    end
+# this gets files and appends them!
+function _fetch_filesyay
     # Split the line with seperator ',', and loop over each value in the line
-    for url in (string split ',' $fullurls)
-        echo $url
+    for url in $link
+        echo "downloading $url"
+        set counter (math $counter + 1)
+        curl -o "downloadedfile_$counter.csv" "$url"
+        
     end
 end
-
+# _process_line gets $line as an argument
 function _process_file -a file
     # Split the file by newlines to get an list of lines, then store it in the
     # variable `$lines`.
@@ -37,7 +45,7 @@ function _process_file -a file
 end
 
 function testfile
-    argparse h/help -- $argv
+    argparse h/help u/url -- $argv
     or set -f failure true # set a failure flag, but otherwise fail silently.
 
     # check if we've failed
@@ -45,7 +53,11 @@ function testfile
         _print_help
         return 1
     end
-
+    
+    if set -q _flag_u
+        _get_url
+        return 0
+    end
     # check if the user requested help
     if set -q _flag_h
         _print_help
