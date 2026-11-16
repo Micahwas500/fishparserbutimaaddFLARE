@@ -9,7 +9,8 @@ Options:
     -h, --help
         Print this help message for you! 
     -u --url
-        Makes it a url! *(hopefully) Not mutually exclusive with Files!*'
+        Makes it a url! *(hopefully) Not mutually exclusive with Files!* 
+        Sorry if it somehow turns out to be exclusive in some way!'
 end
 # take a wild guess :)
 function _get_url
@@ -41,7 +42,7 @@ function _process_line -a line col_count
     for index in (seq 1 (math $col_count - 1))
         set col $header[$index]
         set value $values[$index]
-        printf '    "%s": "%s",\n' $col $value # <- Note indent level 2
+        printf  '    "%s": "%s",\n' $col $value # <- Note indent level 2
     end
     printf '    "%s": "%s"\n' $header[$col_count] $values[$col_count]
 end
@@ -88,6 +89,8 @@ function csv2json
     end
     # YAYAYAY URL CHECK
     if set -q _flag_u
+        print 'you have selected url!'
+        print 'normal files can also be added still'
         _get_url
         _fetch_filesyay
         end
@@ -117,15 +120,3 @@ function csv2json
     return 0
 end
 csv2json $argv
-    # reference!
-# if CONDITION; COMMANDS_TRUE ...;
-# [else if CONDITION2; COMMANDS_TRUE2 ...;]
-# [else; COMMANDS_FALSE ...;]
-# end
-    # ref 2
-# echo "How old are you?"
-
-# Note: `-p ''` suppresses the default prompt that `read` uses.
-# read -p '' age
-
-# echo "Your're $age years old!"
