@@ -14,13 +14,19 @@ Options:
 end
 # take a wild guess :)
 function _get_url
-	echo what link do you have? 
+	echo what link do you want to download and parse? 
     read -l templink
         echo "your link is $templink"
         set -a -g link $templink
-        echo 'do you want another link? (true/false)'
+        echo 'do you want any more links? (it HAS to be true/false)'
         read -l repeatlink
         if test "$repeatlink" = "true"
+            if $linkcounter =! "true"
+                set linkcounter 1
+                end
+            set linkcounter (math $linkcounter + 1 )
+            set $multiplelinks true
+            echo "this is link number $linkcounter ! "
             _get_url
             end
     end
@@ -28,8 +34,9 @@ function _get_url
 function _fetch_filesyay
     # Split the line with seperator ',', and loop over each value in the line
     for url in $link
-        echo "downloading $url"
         set counter (math $counter + 1)
+        # wsl is cooking me so i hope this works
+        echo "downloading file number $counter . url is $url !"
         set -l filename "downloadedfile_$counter.csv"
         curl -L -o "$filename" "$url"
         set -a -g files "$filename"
@@ -89,8 +96,10 @@ function csv2json
     end
     # YAYAYAY URL CHECK
     if set -q _flag_u
-        print 'you have selected url!'
-        print 'normal files can also be added still'
+        print 'You have selected url!'
+        print 'Normal files can also be added still inside of the command 
+        that you used to boot this!
+        Please tell me of bugs that you find!'
         _get_url
         _fetch_filesyay
         end
